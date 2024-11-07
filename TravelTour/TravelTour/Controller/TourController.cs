@@ -119,6 +119,58 @@ namespace TravelTour.Controller
             return null;
         }
 
+        public bool Load()
+        {
+            using (DatabaseHelper dbHelper = new DatabaseHelper(connectionString))
+            {
+                string query = "SELECT * FROM tour";
+                DataTable dataTable = dbHelper.ExecuteQuery(query);
+        
+                items.Clear();
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    items.Add(new TourModel
+                    {
+                        IDtour = Convert.ToInt32(row["IDtour"]),
+                        ID = Convert.ToInt32(row["ID"]),
+                        IDtv = Convert.ToInt32(row["IDtv"]),
+                        BookingDate = Convert.ToDateTime(row["booking_date"]),
+                        Quantity = Convert.ToInt32(row["quantity"])
+                    });
+                }
+                return items.Count > 0;
+            }
+        }
+        
+        public bool Load(object id)
+        {
+            using (DatabaseHelper dbHelper = new DatabaseHelper(connectionString))
+            {
+                string query = "SELECT * FROM tour WHERE IDtour = @IDtour";
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@IDtour", id)
+                };
+        
+                DataTable dataTable = dbHelper.ExecuteQuery(query, parameters);
+                if (dataTable.Rows.Count > 0)
+                {
+                    DataRow row = dataTable.Rows[0];
+                    items.Clear(); // Xóa danh sách hiện tại để chỉ lưu bản ghi đã tải
+                    items.Add(new TourModel
+                    {
+                        IDtour = Convert.ToInt32(row["IDtour"]),
+                        ID = Convert.ToInt32(row["ID"]),
+                        IDtv = Convert.ToInt32(row["IDtv"]),
+                        BookingDate = Convert.ToDateTime(row["booking_date"]),
+                        Quantity = Convert.ToInt32(row["quantity"])
+                    });
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public bool IsExist(object id)
         {
             using (DatabaseHelper dbHelper = new DatabaseHelper(connectionString))
