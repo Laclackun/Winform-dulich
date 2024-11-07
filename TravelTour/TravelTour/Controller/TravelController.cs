@@ -132,6 +132,66 @@ namespace TravelTour.Controller
             return null;
         }
 
+        public bool Load()
+        {
+            using (DatabaseHelper dbHelper = new DatabaseHelper(connectionString))
+            {
+                string query = "SELECT * FROM travel";
+                DataTable dataTable = dbHelper.ExecuteQuery(query);
+        
+                items.Clear();
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    items.Add(new TravelModel
+                    {
+                        IDtv = Convert.ToInt32(row["IDtv"]),
+                        Nametv = row["Nametv"].ToString(),
+                        DateStart = Convert.ToDateTime(row["datestart"]),
+                        DateEnd = Convert.ToDateTime(row["dateend"]),
+                        Description = row["description"].ToString(),
+                        Location = row["location"].ToString(),
+                        TypeTv = row["typetv"].ToString(),
+                        ImageUrl = row["ImageUrl"].ToString(),
+                        Quantity = Convert.ToInt32(row["quantity"])
+                    });
+                }
+                return items.Count > 0;
+            }
+        }
+        
+        public bool Load(object id)
+        {
+            using (DatabaseHelper dbHelper = new DatabaseHelper(connectionString))
+            {
+                string query = "SELECT * FROM travel WHERE IDtv = @IDtv";
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@IDtv", id)
+                };
+        
+                DataTable dataTable = dbHelper.ExecuteQuery(query, parameters);
+                if (dataTable.Rows.Count > 0)
+                {
+                    DataRow row = dataTable.Rows[0];
+                    items.Clear(); // Xóa danh sách hiện tại để chỉ lưu bản ghi đã tải
+                    items.Add(new TravelModel
+                    {
+                        IDtv = Convert.ToInt32(row["IDtv"]),
+                        Nametv = row["Nametv"].ToString(),
+                        DateStart = Convert.ToDateTime(row["datestart"]),
+                        DateEnd = Convert.ToDateTime(row["dateend"]),
+                        Description = row["description"].ToString(),
+                        Location = row["location"].ToString(),
+                        TypeTv = row["typetv"].ToString(),
+                        ImageUrl = row["ImageUrl"].ToString(),
+                        Quantity = Convert.ToInt32(row["quantity"])
+                    });
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public bool IsExist(object id)
         {
             using (DatabaseHelper dbHelper = new DatabaseHelper(connectionString))
