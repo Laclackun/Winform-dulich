@@ -20,6 +20,28 @@ namespace TravelTour.View
             LoadOrderDetails();
         }
 
+        public void SetDataToText(object item)
+        {
+            if (item is TourModel order)
+            {
+                // Gán dữ liệu từ TourModel vào các control trên form
+                txtIDOrder.Text = order.IDtour.ToString();
+                txtIDAcc.Text = order.ID.ToString();
+                txtIDTour.Text = order.IDtv.ToString();
+                txtQuantity.Text = order.Quantity.ToString();
+                datePick.Value = order.BookingDate;
+            }
+        }
+
+        public void GetDataFromText()
+        {
+            if (currentUser != null)
+            {
+                currentUser.Username = txtIDAcc.Text;
+                currentUser.Password = txtIDTour.Text;
+            }
+        }
+        
         private void LoadOrderDetails()
         {
             TourModel order = controller.Read(orderId) as TourModel;
