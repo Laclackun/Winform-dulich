@@ -14,6 +14,8 @@ namespace TravelTour.Controller
         public bool Update(IModel model);
         public bool Delete(Object id);
         public IModel Read(object id);
+        public bool Load();
+        public bool Load(Object id);
         public bool IsExist(Object id);
         public bool IsExist(IModel model);
     }
