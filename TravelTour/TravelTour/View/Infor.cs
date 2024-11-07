@@ -32,6 +32,39 @@ namespace TravelTour.View
             comboSex.Items.Add("Nữ");
         }
 
+        public void SetDataToText(object item)
+        {
+            if (item is InforModel userInfo)
+            {
+                txtName.Text = userInfo.Name;
+                datePick.Value = userInfo.Date;
+                txtLoca.Text = userInfo.Location;
+                comboSex.SelectedItem = userInfo.Sex;
+                txtAge.Text = userInfo.Age.ToString();
+                string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Image");
+                if (!string.IsNullOrEmpty(userInfo.ImageUrl))
+                {
+                    picAccount.Image = Image.FromFile(Path.Combine(imagePath, userInfo.ImageUrl));
+                }
+            }
+        }
+
+        public void GetDataFromText()
+        {
+            if (currentUser != null)
+            {
+                currentUser.Name = txtName.Text;
+                currentUser.Date = datePick.Value;
+                currentUser.Location = txtLoca.Text;
+                currentUser.Sex = comboSex.SelectedItem.ToString();
+                currentUser.Age = int.Parse(txtAge.Text);
+                if (picAccount.Image != null)
+                {
+                    currentUser.ImageUrl = SaveImage();
+                }
+            }
+        }
+
         private void LoadUserInfor()
         {
             var userInfo = inforController.Read(currentUser.ID) as InforModel;
@@ -56,7 +89,6 @@ namespace TravelTour.View
             var userInfo = inforController.Read(currentUser.ID) as InforModel;
             if (inforController.IsExist(currentUser.ID))
             {
-                // Cập nhật thông tin người dùng
                 InforModel updatedInfor = new InforModel
                 {
                     ID = currentUser.ID,
@@ -66,8 +98,7 @@ namespace TravelTour.View
                     Sex = comboSex.SelectedItem.ToString(),
                     Age = int.Parse(txtAge.Text)
                 };
-
-                // Kiểm tra xem người dùng đã ấn nút Dispose hay chưa
+                
                 if (imageDisposed && picAccount.Image == null)
                 {
                     updatedInfor.ImageUrl = userInfo.ImageUrl;
@@ -76,7 +107,7 @@ namespace TravelTour.View
                 {
                     updatedInfor.ImageUrl = SaveImage();
                 }
-
+                
                 bool isUpdated = inforController.Update(updatedInfor);
                 if (isUpdated)
                 {
@@ -89,7 +120,6 @@ namespace TravelTour.View
             }
             else
             {
-                // Tạo mới thông tin người dùng
                 InforModel newInfor = new InforModel
                 {
                     ID = currentUser.ID,
@@ -125,7 +155,6 @@ namespace TravelTour.View
 
         private string SaveImage()
         {
-            // Nếu hình ảnh đã bị giải phóng thì trả về null
             if (imageDisposed)
             {
                 return null;
@@ -149,7 +178,6 @@ namespace TravelTour.View
         {
             if (picAccount.Image != null)
             {
-                // Giải phóng ảnh
                 picAccount.Image.Dispose();
                 picAccount.Image = null;
                 imageDisposed = true;
@@ -159,7 +187,7 @@ namespace TravelTour.View
 
         private void picAccount_Click(object sender, EventArgs e)
         {
-            if (imageDisposed || picAccount.Image == null) // Kiểm tra nếu hình ảnh đã bị giải phóng
+            if (imageDisposed || picAccount.Image == null)
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog
                 {
