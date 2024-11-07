@@ -169,6 +169,56 @@ namespace TravelTour.Controller
             return null;  // Trả về null nếu không tìm thấy
         }
 
+        public bool Load()
+        {
+            using (DatabaseHelper dbHelper = new DatabaseHelper(connectionString))
+            {
+                string query = "SELECT * FROM account";
+                DataTable dataTable = dbHelper.ExecuteQuery(query);
+        
+                items.Clear();
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    items.Add(new UserAccountModel
+                    {
+                        ID = Convert.ToInt32(row["ID"]),
+                        Username = row["username"].ToString(),
+                        Password = row["password"].ToString(),
+                        Role = row["role"].ToString()
+                    });
+                }
+                return items.Count > 0; // Trả về true nếu có dữ liệu
+            }
+        }
+        
+        public bool Load(object id)
+        {
+            using (DatabaseHelper dbHelper = new DatabaseHelper(connectionString))
+            {
+                string query = "SELECT * FROM account WHERE ID = @ID";
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@ID", id)
+                };
+        
+                DataTable dataTable = dbHelper.ExecuteQuery(query, parameters);
+                if (dataTable.Rows.Count > 0)
+                {
+                    DataRow row = dataTable.Rows[0];
+                    items.Clear(); // Xóa danh sách hiện tại để chỉ lưu tài khoản đã tải
+                    items.Add(new UserAccountModel
+                    {
+                        ID = Convert.ToInt32(row["ID"]),
+                        Username = row["username"].ToString(),
+                        Password = row["password"].ToString(),
+                        Role = row["role"].ToString()
+                    });
+                    return true; // Trả về true nếu tìm thấy bản ghi
+                }
+            }
+            return false; // Trả về false nếu không tìm thấy
+        }
+
         public bool IsExist(object id)
         {
             using (DatabaseHelper dbHelper = new DatabaseHelper(connectionString))
