@@ -15,26 +15,40 @@ namespace TravelTour.View
     public partial class AccountManager : Form
     {
         private UserAccountModel currentUser;
-        public AccountManager()
-        {
-            InitializeComponent();
-            LoadData();
-        }
-
+        UserAccountController userAccountController = new UserAccountController("your_connection_string");
+        
         public AccountManager(UserAccountModel user)
         {
             InitializeComponent();
             currentUser = user;
             LoadData();
         }
+        public void SetDataToText(object item)
+        {
+            if (item is UserAccountModel user)
+            {
+                txtID.Text = user.ID.ToString();
+                txtName.Text = user.Username;
+                txtPass.Text = user.Password;
+            }
+        }
 
+        public void GetDataFromText()
+        {
+            if (currentUser != null)
+            {
+                currentUser.Username = txtName.Text;
+                currentUser.Password = txtPass.Text;
+                if (int.TryParse(txtID.Text, out int id))
+                {
+                    currentUser.ID = id;
+                }
+            }
+        }
 
         private void LoadData()
         {
-            UserAccountController userAccountController = new UserAccountController("your_connection_string");
             DataTable dt = userAccountController.LoadAll();
-
-            // Lọc các tài khoản có role là "Customer"
             DataView view = new DataView(dt);
             view.RowFilter = "role = 'Customer'";
             dataGridView.DataSource = view;
@@ -42,7 +56,7 @@ namespace TravelTour.View
 
         private void AccountManager_Load(object sender, EventArgs e)
         {
-            txtID.ReadOnly = true; // Chỉ cho phép xem, không cho phép chỉnh sửa
+            txtID.ReadOnly = true;
         }
 
         private void butBack_Click(object sender, EventArgs e)
@@ -54,22 +68,25 @@ namespace TravelTour.View
         }
 
 
-            private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = dataGridView.Rows[e.RowIndex];
-                txtID.Text = row.Cells["ID"].Value.ToString();
-                txtName.Text = row.Cells["username"].Value.ToString();
-                txtPass.Text = row.Cells["password"].Value.ToString();
+                UserAccountModel selectedUser = new UserAccountModel
+                {
+                    ID = Convert.ToInt32(row.Cells["ID"].Value),
+                    Username = row.Cells["username"].Value.ToString(),
+                    Password = row.Cells["password"].Value.ToString(),
+                    Role = row.Cells["role"].Value.ToString()
+                };
+        
+                SetDataToText(selectedUser);
             }
         }
 
-
         private void butSave_Click(object sender, EventArgs e)
         {
-            UserAccountController userAccountController = new UserAccountController("your_connection_string");
-
             if (string.IsNullOrEmpty(txtName.Text) || string.IsNullOrEmpty(txtPass.Text))
             {
                 MessageBox.Show("Username và Password không được để trống.");
@@ -80,7 +97,7 @@ namespace TravelTour.View
             {
                 Username = txtName.Text,
                 Password = txtPass.Text,
-                Role = "Customer" // Luôn là role "Customer" khi thêm mới
+                Role = "Customer"
             };
 
             if (string.IsNullOrEmpty(txtID.Text)) // Thêm mới
@@ -98,7 +115,7 @@ namespace TravelTour.View
             }
             else // Cập nhật
             {
-                model.ID = int.Parse(txtID.Text); // Lấy ID hiện tại để cập nhật
+                model.ID = int.Parse(txtID.Text);
                 bool success = userAccountController.Update(model);
                 if (success)
                 {
