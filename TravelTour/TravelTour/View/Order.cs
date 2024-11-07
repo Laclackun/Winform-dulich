@@ -28,7 +28,33 @@ namespace TravelTour.View
             dataGridView.DataSource = controller.LoadAll();
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
-
+        
+        public void SetDataToText(object item)
+        {
+            if (item is TourModel order)
+            {
+                txtIDOrder.Text = order.IDtour.ToString();
+                txtIDAcc.Text = order.ID.ToString();
+                txtIDTour.Text = order.IDtv.ToString();
+                txtQuantity.Text = order.Quantity.ToString();
+                datePick.Value = order.BookingDate;
+            }
+        }
+        
+        public void GetDataFromText()
+        {
+            if (selectedOrderId > 0)
+            {
+                TourModel updatedOrder = new TourModel
+                {
+                    IDtour = selectedOrderId,
+                    ID = int.Parse(txtIDAcc.Text),
+                    IDtv = int.Parse(txtIDTour.Text),
+                    BookingDate = datePick.Value,
+                    Quantity = int.Parse(txtQuantity.Text)
+                };
+            }
+        }
 
         private void butChange_Click(object sender, EventArgs e)
         {
