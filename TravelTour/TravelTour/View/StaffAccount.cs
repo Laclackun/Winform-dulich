@@ -36,16 +36,48 @@ namespace TravelTour.View
         {
             UserAccountController userAccountController = new UserAccountController("your_connection_string");
             DataTable dt = userAccountController.LoadAll();
-
-            // Lọc các tài khoản có role là "Staff" và "Manager"
             DataView view = new DataView(dt);
             view.RowFilter = "role = 'Staff' OR role = 'Manager'";
             dataGridView.DataSource = view;
         }
 
+        public void SetDataToText(object item)
+        {
+            if (item is UserAccountModel userAccount)
+            {
+                txtID.Text = userAccount.ID.ToString();
+                txtName.Text = userAccount.Username;
+                txtPass.Text = userAccount.Password;
+                
+                if (userAccount.Role == "Manager")
+                {
+                    raManager.Checked = true;
+                }
+                else if (userAccount.Role == "Staff")
+                {
+                    raStaff.Checked = true;
+                }
+            }
+        }
+        
+        public void GetDataFromText()
+        {
+            if (!string.IsNullOrEmpty(txtID.Text))
+            {
+                UserAccountModel updatedUserAccount = new UserAccountModel
+                {
+                    ID = int.Parse(txtID.Text),
+                    Username = txtName.Text,
+                    Password = txtPass.Text,
+                    Role = raManager.Checked ? "Manager" : "Staff"
+                };
+            }
+        }
+
+
         private void StaffAccount_Load(object sender, EventArgs e)
         {
-            txtID.ReadOnly = true; // Chỉ cho phép xem, không cho phép chỉnh sửa
+            txtID.ReadOnly = true;
         }
 
         private void butBack_Click(object sender, EventArgs e)
@@ -76,17 +108,13 @@ namespace TravelTour.View
             }
         }
 
-
         private void butSave_Click(object sender, EventArgs e)
         {
             try
             {
-                // Lấy dữ liệu từ giao diện
                 string employeeName = txtName.Text;
                 string password = txtPass.Text;
                 string role = raManager.Checked ? "Manager" : "Staff";
-
-                // Tạo đối tượng UserAccountModel
                 UserAccountModel userAccount = new UserAccountModel
                 {
                     Username = employeeName,
@@ -95,8 +123,6 @@ namespace TravelTour.View
                 };
 
                 UserAccountController controller = new UserAccountController("your_connection_string");
-
-                // Nếu txtID trống, thêm mới
                 if (string.IsNullOrEmpty(txtID.Text))
                 {
                     bool success = controller.Create(userAccount);
@@ -111,7 +137,6 @@ namespace TravelTour.View
                 }
                 else
                 {
-                    // Nếu có ID, cập nhật tài khoản
                     userAccount.ID = int.Parse(txtID.Text);
                     bool success = controller.Update(userAccount);
                     if (success)
@@ -123,8 +148,6 @@ namespace TravelTour.View
                         MessageBox.Show("Không thể cập nhật tài khoản.");
                     }
                 }
-
-                // Tải lại dữ liệu
                 LoadData();
             }
             catch (Exception ex)
@@ -132,8 +155,6 @@ namespace TravelTour.View
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
-
-
 
         private void butDel_Click(object sender, EventArgs e)
         {
