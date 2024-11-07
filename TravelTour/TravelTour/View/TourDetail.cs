@@ -26,6 +26,42 @@ namespace TravelTour.View
             LoadTourDetail();
         }
 
+        public void SetDataToText(object item)
+        {
+            if (item is TravelModel travel)
+            {
+                txtIDTour.Text = travel.IDtv.ToString();
+                txtName.Text = travel.Nametv;
+                txtDesciption.Text = travel.Description;
+                txtQuantity.Text = travel.Quantity.ToString();
+                txtLocation.Text = travel.Location;
+                comboType.Text = travel.TypeTv;
+                datePickStart.Value = travel.DateStart;
+                datePickEnd.Value = travel.DateEnd;
+
+                if (!string.IsNullOrEmpty(travel.ImageUrl))
+                {
+                    picTravel.ImageLocation = travel.ImageUrl;
+                }
+            }
+        }
+        
+        public void GetDataFromText()
+        {
+            TravelModel updatedTravel = new TravelModel
+            {
+                IDtv = int.Parse(txtIDTour.Text),
+                Nametv = txtName.Text,
+                Description = txtDesciption.Text,
+                Quantity = int.Parse(txtQuantity.Text),
+                Location = txtLocation.Text,
+                TypeTv = comboType.Text,
+                DateStart = datePickStart.Value,
+                DateEnd = datePickEnd.Value,
+                ImageUrl = picTravel.ImageLocation
+            };
+        }
+
         private void LoadTourDetail()
         {
             txtIDTour.ReadOnly = true;
