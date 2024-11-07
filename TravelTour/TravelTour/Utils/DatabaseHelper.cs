@@ -20,7 +20,6 @@ namespace TravelTour.Utils
 
         }
 
-        // Mở kết nối
         public void OpenConnection()
         {
             if (_connection.State == ConnectionState.Closed)
@@ -29,7 +28,6 @@ namespace TravelTour.Utils
             }
         }
 
-        // Thực hiện truy vấn không trả về dữ liệu (INSERT, UPDATE, DELETE)
         public int ExecuteNonQuery(string query, SqlParameter[] parameters = null)
         {
             using (SqlCommand command = new SqlCommand(query, _connection))
@@ -46,7 +44,6 @@ namespace TravelTour.Utils
             }
         }
 
-        // Thực hiện truy vấn trả về dữ liệu (SELECT)
         public DataTable ExecuteQuery(string query, SqlParameter[] parameters = null)
         {
             using (SqlCommand command = new SqlCommand(query, _connection))
@@ -85,8 +82,6 @@ namespace TravelTour.Utils
             }
         }
 
-
-        // Implement IDisposable interface
         public void Dispose()
         {
             //CloseConnection();
