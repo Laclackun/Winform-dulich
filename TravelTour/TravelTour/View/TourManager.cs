@@ -38,6 +38,43 @@ namespace TravelTour.View
             comboType.Items.Add("Du lịch lịch sử");
         }
 
+        public void SetDataToText(object item)
+        {
+            if (item is TravelModel travel)
+            {
+                txtIDTour.Text = travel.IDtv.ToString();
+                txtName.Text = travel.Nametv;
+                txtDesciption.Text = travel.Description;
+                txtQuantity.Text = travel.Quantity.ToString();
+                txtLocation.Text = travel.Location;
+                comboType.SelectedItem = travel.TypeTv;
+                datePickStart.Value = travel.DateStart;
+                datePickEnd.Value = travel.DateEnd;
+                string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Image", travel.ImageUrl);
+                if (File.Exists(imagePath))
+                {
+                    picTravel.Image = Image.FromFile(imagePath);
+                }
+            }
+        }
+        
+        public void GetDataFromText()
+        {
+            // Lấy dữ liệu từ các control và cập nhật vào TravelModel
+            TravelModel updatedTravel = new TravelModel
+            {
+                IDtv = string.IsNullOrEmpty(txtIDTour.Text) ? 0 : int.Parse(txtIDTour.Text),
+                Nametv = txtName.Text,
+                Description = txtDesciption.Text,
+                Quantity = int.Parse(txtQuantity.Text),
+                Location = txtLocation.Text,
+                TypeTv = comboType.SelectedItem.ToString(),
+                DateStart = datePickStart.Value,
+                DateEnd = datePickEnd.Value,
+                ImageUrl = imageDisposed ? null : SaveImage()
+            };
+        }
+
         private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -73,8 +110,6 @@ namespace TravelTour.View
                 TypeTv = comboType.SelectedItem.ToString(),
                 Quantity = int.Parse(txtQuantity.Text),
             };
-
-            // Kiểm tra hình ảnh đã được dispose hay chưa
             if (imageDisposed && picTravel.Image == null)
             {
                 var travelData = travelController.Read(travel.IDtv) as TravelModel;
@@ -85,7 +120,6 @@ namespace TravelTour.View
                 travel.ImageUrl = SaveImage();
             }
 
-            // Kiểm tra ID tồn tại
             bool exists = travel.IDtv != 0 && travelController.Read(travel.IDtv) != null;
 
             if (!exists)
@@ -107,7 +141,6 @@ namespace TravelTour.View
         {
             if (picTravel.Image != null)
             {
-                // Giải phóng ảnh
                 picTravel.Image.Dispose();
                 picTravel.Image = null;
                 imageDisposed = true;
