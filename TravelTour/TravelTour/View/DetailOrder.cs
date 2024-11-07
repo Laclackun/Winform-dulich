@@ -59,8 +59,6 @@ namespace TravelTour.View
                 txtIDTour.Text = order.IDtv.ToString();
                 txtQuantity.Text = order.Quantity.ToString();
                 datePick.Value = order.BookingDate;
-
-                // Giả sử bạn có hàm để lấy tên tài khoản và tên tour
                 txtNameAcc.Text = GetAccountName(order.ID);
                 txtNameTour.Text = GetTravelName(order.IDtv);
             }
