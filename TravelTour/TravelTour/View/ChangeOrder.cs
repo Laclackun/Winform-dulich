@@ -56,7 +56,6 @@ namespace TravelTour.View
 
         private void butChange_Click(object sender, EventArgs e)
         {
-            // Cập nhật thông tin
             TourModel updatedOrder = new TourModel
             {
                 IDtour = orderId,
