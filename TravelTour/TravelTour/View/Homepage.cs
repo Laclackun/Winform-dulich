@@ -49,16 +49,6 @@ namespace TravelTour
                 txtSreach.Text = user.Username;
                 txtPassword.Text = user.Password;
                 txtRole.Text = user.Role;
-                if (user.Role == "Manager")
-                {
-                    raManager.Checked = true;
-                    raStaff.Checked = false;
-                }
-                else if (user.Role == "Staff")
-                {
-                    raStaff.Checked = true;
-                    raManager.Checked = false;
-                }
             }
         }
         
@@ -69,14 +59,6 @@ namespace TravelTour
                 currentUser.Username = txtSreach.Text;
                 currentUser.Password = txtPassword.Text;
                 currentUser.Role = txtRole.Text;
-                if (raManager.Checked)
-                {
-                    currentUser.Role = "Manager";
-                }
-                else if (raStaff.Checked)
-                {
-                    currentUser.Role = "Staff";
-                }
             }
         }
 
