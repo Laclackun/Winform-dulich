@@ -113,7 +113,7 @@ namespace TravelTour.View
                     MessageBox.Show("Thêm mới thất bại.");
                 }
             }
-            else // Cập nhật
+            else
             {
                 model.ID = int.Parse(txtID.Text);
                 bool success = userAccountController.Update(model);
