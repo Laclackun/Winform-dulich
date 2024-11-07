@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +22,14 @@ namespace TravelTour.Model
             BookingDate = DateTime.Now;
             Quantity = 0;
         }
+
+        public TourModel(int idTour, int id, int idTv, DateTime bookingDate, int quantity)
+        {
+            this.IDtour = idTour;
+            this.ID = id;
+            this.IDtv = idTv;
+            this.BookingDate = bookingDate;
+            this.Quantity = quantity;
+        }
     }
 }
-
