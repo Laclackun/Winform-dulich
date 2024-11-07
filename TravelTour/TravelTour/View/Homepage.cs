@@ -42,7 +42,44 @@ namespace TravelTour
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
 
-        // Phương thức ẩn tất cả các ToolStripMenuItem
+        public void SetDataToText(object item)
+        {
+            if (item is UserAccountModel user)
+            {
+                txtSreach.Text = user.Username;
+                txtPassword.Text = user.Password;
+                txtRole.Text = user.Role;
+                if (user.Role == "Manager")
+                {
+                    raManager.Checked = true;
+                    raStaff.Checked = false;
+                }
+                else if (user.Role == "Staff")
+                {
+                    raStaff.Checked = true;
+                    raManager.Checked = false;
+                }
+            }
+        }
+        
+        public void GetDataFromText()
+        {
+            if (currentUser != null)
+            {
+                currentUser.Username = txtSreach.Text;
+                currentUser.Password = txtPassword.Text;
+                currentUser.Role = txtRole.Text;
+                if (raManager.Checked)
+                {
+                    currentUser.Role = "Manager";
+                }
+                else if (raStaff.Checked)
+                {
+                    currentUser.Role = "Staff";
+                }
+            }
+        }
+
         private void HideAllMenuItems()
         {
             orderToolStripMenuItem.Visible = false;
@@ -56,12 +93,8 @@ namespace TravelTour
         public void DisplayMenuByRole(UserAccountModel user)
         {
             currentUser = user;
-
-            // Ẩn tất cả các ToolStripMenuItem trước
             inforAccountToolStripMenuItem.Visible = true;
-            orderToolStripMenuItem.Visible = true; // Tất cả roles đều xem được thông tin tài khoản và đặt tour
-
-            // Hiển thị menu dựa trên role
+            orderToolStripMenuItem.Visible = true;
             if (currentUser != null)
             {
                 switch (currentUser.Role)
@@ -76,14 +109,11 @@ namespace TravelTour
                         accountManagerToolStripMenuItem.Visible = true;
                         break;
                 }
-                // Hiển thị nút Logout
                 logoutToolStripMenuItem.Visible = true;
-                // Ẩn nút Login khi đã đăng nhập
                 loginToolStripMenuItem1.Visible = false;
             }
             else
             {
-                // Hiển thị nút Login nếu chưa đăng nhập
                 loginToolStripMenuItem1.Visible = true;
             }
         }
@@ -91,28 +121,20 @@ namespace TravelTour
 
         private void loginToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            this.Hide(); // Ẩn form hiện tại
+            this.Hide();
             Login loginForm = new Login();
             if (loginForm.ShowDialog() == DialogResult.OK)
             {
-                // Lấy thông tin người dùng sau khi login
                 UserAccountModel currentUser = loginForm.LoggedInUser; // Thay đổi tên biến cho rõ ràng
                 DisplayMenuByRole(currentUser); // Truyền currentUser vào hàm này
             }
 
-            this.Show(); // Hiển thị lại form Homepage sau khi đăng nhập hoặc hủy đăng nhập
+            this.Show();
         }
 
         private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Ẩn nút Logout và hiển thị nút Login lại
-            logoutToolStripMenuItem.Visible = false;
-            loginToolStripMenuItem1.Visible = true;
-
-            // Xóa thông tin người dùng hiện tại
             currentUser = null;
-
-            // Hiển thị lại form Homepage
             this.Hide();
             Homepage home = new Homepage();
             home.ShowDialog();
@@ -179,35 +201,29 @@ namespace TravelTour
         private void butSreach_Click(object sender, EventArgs e)
         {
             string searchText = txtSreach.Text.Trim();
-
             if (!string.IsNullOrEmpty(searchText))
             {
-                // Tìm kiếm theo bất kỳ cột nào chứa từ khóa
                 string query = @"
-            SELECT * FROM travel 
-            WHERE Nametv LIKE @searchText 
-               OR description LIKE @searchText 
-               OR location LIKE @searchText 
-               OR typetv LIKE @searchText";
-
+                    SELECT * FROM travel 
+                    WHERE Nametv LIKE @searchText 
+                       OR description LIKE @searchText 
+                       OR location LIKE @searchText 
+                       OR typetv LIKE @searchText";
                 using (DatabaseHelper dbHelper = new DatabaseHelper("your_connection_string"))
                 {
                     SqlParameter[] parameters = new SqlParameter[]
                     {
                 new SqlParameter("@searchText", $"%{searchText}%")
                     };
-
                     DataTable searchResult = dbHelper.ExecuteQuery(query, parameters);
                     dataGridView.DataSource = searchResult;
                 }
             }
             else
             {
-                // Nếu không có nội dung tìm kiếm, tải lại toàn bộ dữ liệu
                 LoadAll();
             }
         }
-
 
         private void butDetail_Click(object sender, EventArgs e)
         {
@@ -224,8 +240,6 @@ namespace TravelTour
                 MessageBox.Show("Vui lòng chọn một dòng để xem chi tiết.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
-
 
         private void butClose_Click(object sender, EventArgs e)
         {
