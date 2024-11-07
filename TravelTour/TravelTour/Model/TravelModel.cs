@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +29,19 @@ namespace TravelTour.Model
             TypeTv = string.Empty;
             ImageUrl = string.Empty;
             Quantity = 0;
+        }
+
+        public TravelModel(int id, string name, DateTime startDate, DateTime endDate, string description, string location, string type, string imageUrl, int quantity)
+        {
+            this.IDtv = id;
+            this.Nametv = name;
+            this.DateStart = startDate;
+            this.DateEnd = endDate;
+            this.Description = description;
+            this.Location = location;
+            this.TypeTv = type;
+            this.ImageUrl = imageUrl;
+            this.Quantity = quantity;
         }
     }
 }
