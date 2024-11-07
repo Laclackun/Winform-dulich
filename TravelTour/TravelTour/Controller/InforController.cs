@@ -122,6 +122,64 @@ namespace TravelTour.Controller
             return null;
         }
 
+        public bool Load()
+        {
+            using (DatabaseHelper dbHelper = new DatabaseHelper(connectionString))
+            {
+                string query = "SELECT * FROM infor";
+                DataTable dataTable = dbHelper.ExecuteQuery(query);
+
+                items.Clear();
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    items.Add(new InforModel
+                    {
+                        ID = Convert.ToInt32(row["ID"]),
+                        Name = row["Name"].ToString(),
+                        ImageUrl = row["ImageUrl"].ToString(),
+                        Date = Convert.ToDateTime(row["Date"]),
+                        Location = row["Location"].ToString(),
+                        Sex = row["Sex"].ToString(),
+                        Age = Convert.ToInt32(row["Age"])
+                    });
+                }
+
+                return items.Count > 0;
+            }
+        }
+
+        public bool Load(object id)
+        {
+            using (DatabaseHelper dbHelper = new DatabaseHelper(connectionString))
+            {
+                string query = "SELECT * FROM infor WHERE ID = @ID";
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@ID", id)
+                };
+
+                DataTable dataTable = dbHelper.ExecuteQuery(query, parameters);
+                if (dataTable.Rows.Count > 0)
+                {
+                    DataRow row = dataTable.Rows[0];
+                    items.Clear(); // Clear current items list to store only the loaded item
+                    items.Add(new InforModel
+                    {
+                        ID = Convert.ToInt32(row["ID"]),
+                        Name = row["Name"].ToString(),
+                        ImageUrl = row["ImageUrl"].ToString(),
+                        Date = Convert.ToDateTime(row["Date"]),
+                        Location = row["Location"].ToString(),
+                        Sex = row["Sex"].ToString(),
+                        Age = Convert.ToInt32(row["Age"])
+                    });
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public bool IsExist(object id)
         {
             using (DatabaseHelper dbHelper = new DatabaseHelper(connectionString))
