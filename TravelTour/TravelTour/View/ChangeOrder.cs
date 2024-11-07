@@ -24,7 +24,6 @@ namespace TravelTour.View
         {
             if (item is TourModel order)
             {
-                // Gán dữ liệu từ TourModel vào các control trên form
                 txtIDOrder.Text = order.IDtour.ToString();
                 txtIDAcc.Text = order.ID.ToString();
                 txtIDTour.Text = order.IDtv.ToString();
