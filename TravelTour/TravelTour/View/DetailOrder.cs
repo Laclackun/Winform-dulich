@@ -19,6 +19,29 @@ namespace TravelTour.View
             LoadOrderDetails();
         }
 
+        public void SetDataToText(object item)
+        {
+            if (item is TourModel order)
+            {
+                txtIDOrder.Text = order.IDtour.ToString();
+                txtIDAcc.Text = order.ID.ToString();
+                txtIDTour.Text = order.IDtv.ToString();
+                txtQuantity.Text = order.Quantity.ToString();
+                datePick.Value = order.BookingDate;
+                txtNameAcc.Text = GetAccountName(order.ID);
+                txtNameTour.Text = GetTravelName(order.IDtv);
+            }
+        }
+        
+        public void GetDataFromText()
+        {
+            if (currentUser != null)
+            {
+                currentUser.Username = txtIDAcc.Text;
+                currentUser.Password = txtIDTour.Text;
+            }
+        }
+
         private void LoadOrderDetails()
         {
             txtIDOrder.ReadOnly = true;
