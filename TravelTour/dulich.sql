@@ -9,9 +9,9 @@ Go
 -- Tour => Order Form.
 
 CREATE TABLE account (
-    ID smallint NOT NULL PRIMARY KEY IDENTITY(1, 1),
-	username nvarchar(50) NOT NULL,  
-    password varchar(64) NOT NULL,
+	ID smallint NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	username nvarchar(50) NOT NULL,
+	password varchar(64) NOT NULL,
 	role nvarchar(20) NOT NULL,
 );
 
