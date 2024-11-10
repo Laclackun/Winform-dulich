@@ -18,6 +18,6 @@ Cant Create New when alread hit information in DataGridView ?
 
 How to setup .exe ?
 -> First Open Folder "Travelexe" -> "Debug" -> Setup.
-(Dont put the folder in C:/ pls)
+(Dont setup the folder in C:/ pls)
 
 Thanks!
