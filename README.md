@@ -5,7 +5,7 @@ Cant connect to sql ?
                 _connection = new SqlConnection("your data source here");
         }
 "
-3. ex:"_connection = new SqlConnection("Data Source=PCTRAN;Initial Catalog=dulich;Integrated Security=True");"
+3. ex:"Data Source=PCTRAN;Initial Catalog=dulich;Integrated Security=True"
 4. Rebuild the Travelexe (Setup for .exe) again.
 
 What username to login ?
