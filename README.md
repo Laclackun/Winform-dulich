@@ -1,11 +1,11 @@
 Cant connect to sql ?
 1. In "Utils" -> DatabaseHelper -> Change your Data Source.
-"        public DatabaseHelper(string connectionString)
-    2. {
+2. "public DatabaseHelper(string connectionString)
+        {
             _connection = new SqlConnection("...");
         }
 "
-2. Rebuild the Travelexe (Setup for .exe) again.
+3. Rebuild the Travelexe (Setup for .exe) again.
 
 What username to login ?
 1. quyquynh (admin) : 12345
