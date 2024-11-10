@@ -1,7 +1,7 @@
 Cant connect to sql ?
 1. In "Utils" -> DatabaseHelper -> Change your Data Source.
 "        public DatabaseHelper(string connectionString)
-        {
+    2. {
             _connection = new SqlConnection("...");
         }
 "
