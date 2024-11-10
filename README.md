@@ -3,9 +3,9 @@ Cant connect to sql ?
 2. "public DatabaseHelper(string connectionString)
         {
                 _connection = new SqlConnection("your data source here");
-                //_connection = new SqlConnection("Data Source=PCTRAN;Initial Catalog=dulich;Integrated Security=True");
         }
 "
+2.5. ex:"_connection = new SqlConnection("Data Source=PCTRAN;Initial Catalog=dulich;Integrated Security=True");"
 3. Rebuild the Travelexe (Setup for .exe) again.
 
 What username to login ?
