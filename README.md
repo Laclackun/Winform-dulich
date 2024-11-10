@@ -7,6 +7,6 @@ What username to login ?
 3. uyDuong (Customer) : ABC
 
 Cant Create New when alread hit information in DataGridView ?
--> Click <Back>
+-> Click Button "Back" and try it again in that view.
 
 Thanks!
